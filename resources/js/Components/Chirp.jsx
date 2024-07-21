@@ -16,7 +16,7 @@ export default function Chirp({ chirp }) {
     const [editing, setEditing] = useState(false);
     const [commenting, setCommenting] = useState(false);
 
-    const { data, setData, patch, post, clearErrors, reset, errors } = useForm({
+    const { data, setData, put, post, clearErrors, reset, errors } = useForm({
         message: chirp.message,
     });
 
@@ -26,9 +26,9 @@ export default function Chirp({ chirp }) {
         user_id: auth.user.id
     });
 
-    const submit = (e) => {
+    const update = (e) => {
         e.preventDefault();
-        patch(route('chirps.update', chirp.id), { onSuccess: () => setEditing(false) });
+        put(route('chirps.update', chirp.id), { onSuccess: () => setEditing(false) });
     };
 
     const comment = (e) => {
@@ -74,7 +74,7 @@ export default function Chirp({ chirp }) {
                                 }
                             </div>
                             {editing
-                                ? <form onSubmit={submit}>
+                                ? <form onSubmit={update}>
                                     <textarea value={data.message} onChange={e => setData('message', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
                                     <InputError message={errors.message} className="mt-2" />
                                     <div className="space-x-2">
