@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PeopleController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,15 +27,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/chirps', [ChirpController::class, 'index'])->name('chirps.index');
+    Route::post('/chirps', [ChirpController::class, 'store'])->name('chirps.store');
+    Route::put('/chirps/{chirp}', [ChirpController::class, 'update'])->name('chirps.update');
+    Route::delete('/chirps/{chirp}', [ChirpController::class, 'destroy'])->name('chirps.destroy');
 
-Route::resource('chirps', ChirpController::class)
-    ->only(['index', 'store', 'update', 'destroy'])
-    ->middleware('auth');
+    Route::post('/comments', [CommentsController::class, 'store'])->name('comments.store');
+    Route::put('/comments/{comment}', [CommentsController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{comment}', [CommentsController::class, 'destroy'])->name('comments.destroy');
 
-
-Route::resource('comments', CommentsController::class)
-    ->only(['store', 'update', 'destroy'])
-    ->middleware('auth');
+    Route::get('/people', [PeopleController::class, 'index'])->name('people.index');
+    Route::post('/people', [PeopleController::class, 'search'])->name('people.search');
+});
 
 
 require __DIR__.'/auth.php';

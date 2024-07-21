@@ -61,4 +61,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comments::class);
     }
+
+    /**
+     * Get the people for the user.
+     */
+    public function people(): HasOne
+    {
+        return $this->hasOne(People::class);
+    }
 }
