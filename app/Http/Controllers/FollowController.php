@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Follow;
 use App\Models\User;
 use Inertia\Inertia;
@@ -25,10 +26,11 @@ class FollowController extends Controller
     public function search(Request $request)
     {
         return Inertia::render('Follow/Index', [
-            'Users' => User::where('name', 'LIKE', "%$request->name%")
-                ->orWhere('email', 'LIKE', "%$request->name%")
-                ->where('id', '!=', auth()->id())
-                ->get(),
+            'Users' =>  User::where('id', '!=', auth()->id())
+                ->where(function (Builder $query) use ($request) {
+                    $query->where('name', 'LIKE', "%$request->name%")
+                        ->orWhere('email', 'LIKE', "%$request->name%");
+                })->get(),
         ]);
     }
 

@@ -11,7 +11,7 @@ export default function Index({ Users, auth }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('people.index'), { preserveScroll: true });
+        post(route('people.search'), { preserveScroll: true });
     }
 
 
@@ -27,7 +27,7 @@ export default function Index({ Users, auth }) {
             <Head title="People" />
 
             <div className="max-w-2xl mx-auto p-4 sm:p-6 lg:p-8">
-                <form onSubmit={submit}>
+                <form style={{ userSelect: 'none' }}  onSubmit={submit}>
                     <input
                         type="text"
                         placeholder="Search"
@@ -35,7 +35,17 @@ export default function Index({ Users, auth }) {
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
                     ></input>
+                    {/* Checkbox for followers */}
                     <PrimaryButton className="mt-4">Search</PrimaryButton>
+
+                    {/* Checkbox for following */}
+                    <label style={{ cursor: 'pointer' }} htmlFor="following" className="ml-2">Following</label>
+                    <input
+                        type="checkbox"
+                        id="following"
+                        name="following"
+                        className="ml-2"
+                    ></input>
                 </form>
 
                 <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">

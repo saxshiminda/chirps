@@ -40,7 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/people', [FollowController::class, 'index'])->name('people.index');
     Route::post('/people', [FollowController::class, 'search'])->name('people.search');
-    Route::post('/people', [FollowController::class, 'follow'])->name('people.follow');
+    Route::post('/follow', [FollowController::class, 'follow'])->name('people.follow');
 });
 
 
