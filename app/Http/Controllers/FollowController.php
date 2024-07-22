@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\People;
+use App\Models\Follow;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
-class PeopleController extends Controller
+class FollowController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('People/Index', [
+        return Inertia::render('Follow/Index', [
             'Users' => User::where('id', '!=', auth()->id())->get(),
         ]);
     }
@@ -24,7 +24,7 @@ class PeopleController extends Controller
      */
     public function search(Request $request)
     {
-        return Inertia::render('People/Index', [
+        return Inertia::render('Follow/Index', [
             'Users' => User::where('name', 'LIKE', "%$request->name%")
                 ->orWhere('email', 'LIKE', "%$request->name%")
                 ->where('id', '!=', auth()->id())
@@ -37,13 +37,13 @@ class PeopleController extends Controller
      */
     public function follow(Request $request){
         // check if the user is already following the person
-        $people = People::where('user_id', auth()->id())
+        $people = Follow::where('user_id', auth()->id())
             ->where('friend_id', $request->userId)
             ->first();
 
         // if not, create a new record
         if (!$people) {
-            People::create([
+            Follow::create([
                 'user_id' => auth()->id(),
                 'friend_id' => $request->userId,
             ]);
@@ -73,7 +73,7 @@ class PeopleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(People $people)
+    public function show(Follow $people)
     {
         //
     }
@@ -81,7 +81,7 @@ class PeopleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(People $people)
+    public function edit(Follow $people)
     {
         //
     }
@@ -89,7 +89,7 @@ class PeopleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, People $people)
+    public function update(Request $request, Follow $people)
     {
         //
     }
@@ -97,7 +97,7 @@ class PeopleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(People $people)
+    public function destroy(Follow $people)
     {
         //
     }

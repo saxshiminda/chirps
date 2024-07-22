@@ -3,7 +3,8 @@
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\ChirpController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PeopleController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\FollowController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,9 +38,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/comments/{comment}', [CommentsController::class, 'update'])->name('comments.update');
     Route::delete('/comments/{comment}', [CommentsController::class, 'destroy'])->name('comments.destroy');
 
-    Route::get('/people', [PeopleController::class, 'index'])->name('people.index');
-    Route::post('/people', [PeopleController::class, 'search'])->name('people.search');
+    Route::get('/people', [FollowController::class, 'index'])->name('people.index');
+    Route::post('/people', [FollowController::class, 'search'])->name('people.search');
+    Route::post('/people', [FollowController::class, 'follow'])->name('people.follow');
 });
+
+
+// Route::group(['middleware' => 'auth'], function () {
+//     Route::get('/{page}', [PageController::class, 'index'])->('route');
+// });
 
 
 require __DIR__.'/auth.php';

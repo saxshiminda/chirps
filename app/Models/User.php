@@ -67,6 +67,6 @@ class User extends Authenticatable
      */
     public function people(): HasOne
     {
-        return $this->hasOne(People::class);
+        return $this->hasOne(Follow::class);
     }
 }
