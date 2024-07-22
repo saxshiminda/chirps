@@ -14,6 +14,11 @@ export default function Index({ Users, auth }) {
         post(route('people.index'), { preserveScroll: true });
     }
 
+
+    function sendFollowRequest(userId) {
+        post(route('people.follow', {userId: userId} ));
+    }
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -35,7 +40,7 @@ export default function Index({ Users, auth }) {
 
                 <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
                     {Users.map(user =>
-                        <Userslist key={user.id} user={user} />
+                        <Userslist key={user.id} user={user} follow={sendFollowRequest} />
                     )}
                 </div>
             </div>

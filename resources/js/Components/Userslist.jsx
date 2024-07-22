@@ -2,7 +2,7 @@
 import React from 'react';
 // import { Link } from '@inertiajs/inertia-react';
 
-export default function Userslist({ user }) {
+export default function Userslist({ user, follow }) {
     return (
         <div className="p-4">
             <div className="flex items-center">
@@ -12,12 +12,15 @@ export default function Userslist({ user }) {
                     <p className="text-sm text-gray-600">{user.email}</p>
 
                     <div className="mt-4">
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button
+                            onClick={() => {follow(user.id)} }
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Follow
                         </button>
 
                         {/* Not in use yet */}
-                        <button className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded disabled cursor-not-allowed">
+                        <button
+                            className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded disabled cursor-not-allowed">
                             Profile
                         </button>
 

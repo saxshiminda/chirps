@@ -33,6 +33,28 @@ class PeopleController extends Controller
     }
 
     /**
+     * Follow a user.
+     */
+    public function follow(Request $request){
+        // check if the user is already following the person
+        $people = People::where('user_id', auth()->id())
+            ->where('friend_id', $request->userId)
+            ->first();
+
+        // if not, create a new record
+        if (!$people) {
+            People::create([
+                'user_id' => auth()->id(),
+                'friend_id' => $request->userId,
+            ]);
+        } else {
+            // send a message if the user is already following the person
+            return redirect()->back()->with('message', 'You are already following this person');
+        }
+
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
