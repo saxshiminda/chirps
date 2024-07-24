@@ -16,7 +16,10 @@ class FollowController extends Controller
     public function index()
     {
         return Inertia::render('Follow/Index', [
-            'Users' => User::where('id', '!=', auth()->id())->get(),
+            'Following' => Follow::where('user_id', auth()->id())->get('friend_id')->toArray(),
+            'Users' => User::where('id', '!=', auth()->id())
+                ->get(),
+
         ]);
     }
 
@@ -25,13 +28,34 @@ class FollowController extends Controller
      */
     public function search(Request $request)
     {
-        return Inertia::render('Follow/Index', [
-            'Users' =>  User::where('id', '!=', auth()->id())
-                ->where(function (Builder $query) use ($request) {
-                    $query->where('name', 'LIKE', "%$request->name%")
-                        ->orWhere('email', 'LIKE', "%$request->name%");
-                })->get(),
-        ]);
+        if($request->following){
+            return Inertia::render('Follow/Index', [
+                // fetch all the users with the id of frined_id in the follow table
+                // where user_id is the authenticated user
+
+                'Following' => Follow::where('user_id', auth()->id())->get('friend_id')->toArray(),
+                'Users' => User::where('id', '!=', auth()->id())
+                    // where id in
+                    ->whereIn('id', Follow::select('friend_id')
+                        ->where('user_id', auth()->id())
+                        ->get()
+                    )
+                    ->where(function (Builder $query) use ($request) {
+                        $query->where('name', 'LIKE', "%$request->name%")
+                            ->orWhere('email', 'LIKE', "%$request->name%");
+                    })
+                    ->get(),
+            ]);
+        } else {
+            return Inertia::render('Follow/Index', [
+                'Following' => Follow::where('user_id', auth()->id())->get('friend_id')->toArray(),
+                'Users' =>  User::where('id', '!=', auth()->id())
+                    ->where(function (Builder $query) use ($request) {
+                        $query->where('name', 'LIKE', "%$request->name%")
+                            ->orWhere('email', 'LIKE', "%$request->name%");
+                    })->get(),
+            ]);
+        }
     }
 
     /**
@@ -50,8 +74,8 @@ class FollowController extends Controller
                 'friend_id' => $request->userId,
             ]);
         } else {
-            // send a message if the user is already following the person
-            return redirect()->back()->with('message', 'You are already following this person');
+            // if yes, delete the record
+            $people->delete();
         }
 
     }

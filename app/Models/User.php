@@ -65,8 +65,8 @@ class User extends Authenticatable
     /**
      * Get the people for the user.
      */
-    public function people(): HasOne
+    public function follows(): HasMany
     {
-        return $this->hasOne(Follow::class);
+        return $this->hasMany(Follow::class);
     }
 }

@@ -2,7 +2,8 @@
 import React from 'react';
 // import { Link } from '@inertiajs/inertia-react';
 
-export default function Userslist({ user, follow }) {
+export default function Userslist({ user, follow, friends }) {
+
     return (
         <div className="p-4">
             <div className="flex items-center">
@@ -15,7 +16,7 @@ export default function Userslist({ user, follow }) {
                         <button
                             onClick={() => {follow(user.id)} }
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            Follow
+                            {friends.includes(user.id) ? 'Unfollow' : 'Follow'}
                         </button>
 
                         {/* Not in use yet */}

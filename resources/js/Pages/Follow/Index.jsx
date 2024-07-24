@@ -4,7 +4,9 @@ import Userslist from '@/Components/Userslist';
 import PrimaryButton from '@/Components/PrimaryButton';
 import { useForm, Head } from '@inertiajs/react';
 
-export default function Index({ Users, auth }) {
+export default function Index({ Users, Following, auth }) {
+    var friends = Following.map( (f) => f.friend_id );
+
     const { data, setData, post, processing, reset, errors } = useForm({
         name: '',
     });
@@ -45,12 +47,13 @@ export default function Index({ Users, auth }) {
                         id="following"
                         name="following"
                         className="ml-2"
+                        onChange={(e) => setData('following', e.target.checked)}
                     ></input>
                 </form>
 
                 <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                    {Users.map(user =>
-                        <Userslist key={user.id} user={user} follow={sendFollowRequest} />
+                    {Users.map( (user, index) =>
+                        <Userslist key={user.id} user={user} follow={sendFollowRequest} friends={friends}/>
                     )}
                 </div>
             </div>
