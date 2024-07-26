@@ -11,8 +11,27 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
+use App\Models\Chirp;
+use App\Models\User;
+
 class ProfileController extends Controller
 {
+    /**
+     * Display the user's profile.
+     */
+    public function index(Request $request): Response
+    {
+        $userId  = $request->route('userId') ?? $request->user()->id;
+
+        return Inertia::render('Profile/Index', [
+            'user' => User::where('id', $userId)->firstOrFail(),
+            'chirps' => Chirp::with('user:id,name,avatar')
+                ->with('comments.user:id,name,avatar')
+                ->where('user_id', $userId)
+                ->latest()->get(),
+        ]);
+    }
+
     /**
      * Display the user's profile form.
      */

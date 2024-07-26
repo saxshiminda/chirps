@@ -39,7 +39,7 @@ class CommentsController extends Controller
 
         $request->user()->comments()->create($validated);
 
-        return redirect()->route('chirps.index');
+        return redirect()->back();
     }
 
     /**

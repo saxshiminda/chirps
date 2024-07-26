@@ -1,5 +1,7 @@
 // create users list component
 import React from 'react';
+import NavLink from '@/Components/NavLink';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 // import { Link } from '@inertiajs/inertia-react';
 
 export default function Userslist({ user, follow, friends }) {
@@ -16,13 +18,19 @@ export default function Userslist({ user, follow, friends }) {
                         <button
                             onClick={() => {follow(user.id)} }
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                            {friends.includes(user.id) ? 'Unfollow' : 'Follow'}
+                            <NavLink style={{ color: 'white'}}>
+                                {friends.includes(user.id) ? 'Unfollow' : 'Follow'}
+                            </NavLink>
                         </button>
 
                         {/* Not in use yet */}
                         <button
-                            className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded disabled cursor-not-allowed">
-                            Profile
+                            className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+
+                            {/* disable hower on this navlink */}
+                            <NavLink href={route('profile.index', {userId: user.id})} active={route().current('profile.index')} style={{ color: 'white'}}>
+                                Profile
+                            </NavLink>
                         </button>
 
                         <button className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded disabled cursor-not-allowed">

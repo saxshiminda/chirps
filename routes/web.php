@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\ChirpController;
-// use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\FollowController;
@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/setting', [SettingController::class, 'edit'])->name('setting.edit');
     Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
     Route::delete('/setting', [SettingController::class, 'destroy'])->name('setting.destroy');
+
+    Route::get('/profile{userId}', [ProfileController::class, 'index'])->name('profile.index');
 });
 
 Route::group(['middleware' => 'auth'], function () {

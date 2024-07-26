@@ -21,7 +21,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
         formData.append('email', data.email);
         formData.append('avatar', data.avatar);
 
-        post(route('profile.update'), formData, {
+        post(route('setting.update'), formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
