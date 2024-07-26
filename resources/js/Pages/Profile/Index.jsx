@@ -2,13 +2,29 @@ import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import Chirp from '@/Components/Chirp';
+import NavLink from '@/Components/NavLink';
 
-export default function Profile({ user, chirps }) {
-    console.log(chirps);
+export default function Profile({ auth, user, chirps }) {
+    console.log(auth);
     return (
         <AuthenticatedLayout
             user={user}
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>}
+            header={
+                <>
+                {auth.user.id !== user.id
+                ?
+                    <button
+                        className="ml-2 text-red py-3 px-4 rounded">
+
+                            <NavLink href={route('profile.index', auth.user.id)}>
+                                My profile
+                            </NavLink>
+                    </button>
+                :
+                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
+                }
+                </>
+            }
         >
             <Head title="Profile" />
 
