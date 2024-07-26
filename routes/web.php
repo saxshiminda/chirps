@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\ChirpController;
-use App\Http\Controllers\ProfileController;
+// use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\FollowController;
 use Illuminate\Foundation\Application;
@@ -23,9 +24,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/setting', [SettingController::class, 'edit'])->name('setting.edit');
+    Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
+    Route::delete('/setting', [SettingController::class, 'destroy'])->name('setting.destroy');
 });
 
 Route::group(['middleware' => 'auth'], function () {

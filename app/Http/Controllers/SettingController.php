@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class ProfileController extends Controller
+class SettingController extends Controller
 {
     /**
      * Display the user's profile form.
@@ -45,7 +45,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return Redirect::route('setting.edit');
     }
 
     /**

@@ -61,7 +61,7 @@ export default function Authenticated({ user, header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        <Dropdown.Link href={route('setting.edit')}>Settings</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
@@ -105,7 +105,7 @@ export default function Authenticated({ user, header, children }) {
                             Chirps
                         </ResponsiveNavLink>
                         <ResponsiveNavLink href={route('people.index')} active={route().current('people.index')}>
-                        People
+                            People
                         </ResponsiveNavLink>
                     </div>
 
@@ -116,7 +116,7 @@ export default function Authenticated({ user, header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('setting.edit')}>Settings</ResponsiveNavLink>
                             <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                 Log Out
                             </ResponsiveNavLink>
