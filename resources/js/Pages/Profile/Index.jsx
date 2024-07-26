@@ -5,7 +5,6 @@ import Chirp from '@/Components/Chirp';
 import NavLink from '@/Components/NavLink';
 
 export default function Profile({ auth, user, chirps }) {
-    console.log(auth);
     return (
         <AuthenticatedLayout
             user={user}
@@ -21,7 +20,7 @@ export default function Profile({ auth, user, chirps }) {
                             </NavLink>
                     </button>
                 :
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">Profile</h2>
+                    <h2 className="font-normal text-xl text-gray-800 leading-tight">Profile</h2>
                 }
                 </>
             }
