@@ -1,11 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
+import axios from 'axios';
 
 export default function Authenticated({ user, header, children }) {
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+        getNotifications();
+    }, []);
+
+    const getNotifications = () => {
+        axios.get('/notifications')
+            .then(response => {
+                setNotifications(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching notifications:', error);
+            });
+    }
+
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -33,6 +50,48 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('people.index')} active={route().current('people.index')}>
                                     People
                                 </NavLink>
+                            </div>
+
+                            {/* Notifications icon and dropdown */}
+                            <div className="hidden sm:flex sm:items-center sm:ms-6">
+                                <div className="ms-3 relative">
+                                    <Dropdown>
+                                        <Dropdown.Trigger>
+                                            <button
+                                                onClick={getNotifications}
+                                                type="button"
+                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                            >
+                                                <svg
+                                                    className="h-6 w-6"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </Dropdown.Trigger>
+
+                                        <Dropdown.Content>
+                                            {notifications.length > 0 ? (
+                                                notifications.map((notification, index) => (
+                                                    <Dropdown.Link key={index} href={route('profile.index', {userId: notification.data.user_id})} >
+                                                        {notification.data.message}
+                                                    </Dropdown.Link>
+                                                ))
+                                            ) : (
+                                                <Dropdown.Link href="#">No notifications</Dropdown.Link>
+                                            )}
+                                        </Dropdown.Content>
+                                    </Dropdown>
+                                </div>
                             </div>
                         </div>
 

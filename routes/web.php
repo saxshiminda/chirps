@@ -46,6 +46,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/follow', [FollowController::class, 'follow'])->name('people.follow');
 });
 
+Route::get('/notifications', function () {
+    return auth()->user()->notifications;
+})->middleware(['auth']);
+
+
 
 // Route::group(['middleware' => 'auth'], function () {
 //     Route::get('/{page}', [PageController::class, 'index'])->('route');

@@ -7,6 +7,7 @@ use App\Models\Follow;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Notifications\NewFollow;
 
 class FollowController extends Controller
 {
@@ -73,11 +74,12 @@ class FollowController extends Controller
                 'user_id' => auth()->id(),
                 'friend_id' => $request->userId,
             ]);
+
+            $this->getUser($request->userId)->notify(new NewFollow($this->getUser( $request->userId )));
         } else {
             // if yes, delete the record
             $people->delete();
         }
-
     }
 
     /**
@@ -126,5 +128,9 @@ class FollowController extends Controller
     public function destroy(Follow $people)
     {
         //
+    }
+
+    protected function getUser($id){
+        return User::findOrFail($id);
     }
 }

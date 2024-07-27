@@ -34,8 +34,11 @@ export default function Chirp({ chirp }) {
 
     const comment = (e) => {
         e.preventDefault();
-        postComment(route('comments.store'), { onSuccess: () => setCommenting(false) });
-        commentData.message = '';
+        postComment(route('comments.store'), { onSuccess: () => {
+            setCommenting(false);
+            resetComment();
+        }});
+
     };
 
     return (
@@ -99,11 +102,10 @@ export default function Chirp({ chirp }) {
                     {showComments &&
                         <>
                             <form onSubmit={comment}>
-                                <textarea  value={commentData.message} onChange={e => setCommentData('message', e.target.value)} className="mt-4 w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
+                                <textarea value={commentData.message} onChange={e => setCommentData('message', e.target.value)} className="h-15 float-left w-full text-gray-900 border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"></textarea>
                                 <InputError message={commentErrors.message} className="mt-2" />
                                 <div className="space-x-2">
                                     <PrimaryButton className="mt-2 mb-2">Save</PrimaryButton>
-                                    <button className="mt-2 mb-2" onClick={() => {setCommenting(false)}}>Cancel</button>
                                 </div>
                             </form>
 
