@@ -49,13 +49,22 @@ export default function Profile({ auth, user, chirps, following }) {
                                     <h1 className="text-2xl font-semibold text-gray-800">{user.name}</h1>
                                     <p className="text-sm text-gray-600">{user.email}</p>
                                 </div>
-                                { following != false &&
+                                { following != false ?
                                     <button
                                         onClick={ () => handleFollowToggle(user.id)}
                                         className="ml-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                             {/* Send post request */}
                                         <NavLink style={{ color: 'white'}}>
                                             {following == null ? 'Follow' : 'Unfollow'}
+                                        </NavLink>
+                                    </button>
+                                :
+                                    <button
+                                        className="ml-10 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                            {/* Send post request */}
+                                        <NavLink style={{ color: 'white'}} href={route('setting.edit')}>
+
+                                            Edit Profile
                                         </NavLink>
                                     </button>
                                 }
