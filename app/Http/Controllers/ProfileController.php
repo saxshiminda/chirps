@@ -13,6 +13,7 @@ use Inertia\Response;
 
 use App\Models\Chirp;
 use App\Models\User;
+use App\Models\Follow;
 
 class ProfileController extends Controller
 {
@@ -21,7 +22,16 @@ class ProfileController extends Controller
      */
     public function index(Request $request): Response
     {
+        $authUser = auth()->user();
         $userId  = $request->route('userId') ?? $request->user()->id;
+
+        if($userId != $authUser->id) {
+            $following = Follow::where('user_id', $authUser->id)
+                ->where('friend_id', $userId)
+                ->first();
+        } else {
+            $following = false;
+        }
 
         return Inertia::render('Profile/Index', [
             'user' => User::where('id', $userId)->firstOrFail(),
@@ -29,6 +39,7 @@ class ProfileController extends Controller
                 ->with('comments.user:id,name,avatar')
                 ->where('user_id', $userId)
                 ->latest()->get(),
+            'following' => $following,
         ]);
     }
 

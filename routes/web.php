@@ -23,15 +23,11 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/setting', [SettingController::class, 'edit'])->name('setting.edit');
     Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
     Route::delete('/setting', [SettingController::class, 'destroy'])->name('setting.destroy');
 
-    Route::get('/profile{userId}', [ProfileController::class, 'index'])->name('profile.index');
-});
-
-Route::group(['middleware' => 'auth'], function () {
     Route::get('/chirps', [ChirpController::class, 'index'])->name('chirps.index');
     Route::post('/chirps', [ChirpController::class, 'store'])->name('chirps.store');
     Route::put('/chirps/{chirp}', [ChirpController::class, 'update'])->name('chirps.update');
@@ -43,11 +39,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/people', [FollowController::class, 'index'])->name('people.index');
     Route::post('/people', [FollowController::class, 'search'])->name('people.search');
-    Route::post('/follow', [FollowController::class, 'follow'])->name('people.follow');
+    Route::post('/follow', [FollowController::class, 'follow'])->name('follow');
+
+    Route::get('/profile{userId}', [ProfileController::class, 'index'])->name('profile.index');
 });
 
 Route::get('/notifications', function () {
-    return auth()->user()->notifications;
+    $activeNotifications = auth()->user()->unreadNotifications;
+
+    auth()->user()->unreadNotifications->markAsRead();
+
+    return $activeNotifications;
 })->middleware(['auth']);
 
 

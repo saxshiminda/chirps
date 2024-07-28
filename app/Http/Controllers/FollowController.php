@@ -80,6 +80,8 @@ class FollowController extends Controller
             // if yes, delete the record
             $people->delete();
         }
+
+        return redirect()->back();
     }
 
     /**

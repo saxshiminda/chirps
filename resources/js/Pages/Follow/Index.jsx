@@ -18,7 +18,7 @@ export default function Index({ Users, Following, auth }) {
 
 
     function sendFollowRequest(userId) {
-        post(route('people.follow', {userId: userId} ));
+        post(route('follow', {userId: userId} ));
     }
 
     return (

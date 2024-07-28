@@ -1,10 +1,17 @@
 import React from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import Chirp from '@/Components/Chirp';
 import NavLink from '@/Components/NavLink';
 
-export default function Profile({ auth, user, chirps }) {
+export default function Profile({ auth, user, chirps, following }) {
+
+    const { post} = useForm();
+
+    const handleFollowToggle = (userId) => {
+        post(route('follow', { userId: userId }));
+    }
+
     return (
         <AuthenticatedLayout
             user={user}
@@ -12,13 +19,11 @@ export default function Profile({ auth, user, chirps }) {
                 <>
                 {auth.user.id !== user.id
                 ?
-                    <button
-                        className="ml-2 text-red py-3 px-4 rounded">
-
-                            <NavLink href={route('profile.index', auth.user.id)}>
-                                My profile
-                            </NavLink>
-                    </button>
+                    <h2>
+                        <NavLink href={route('profile.index', auth.user.id)}>
+                            My profile
+                        </NavLink>
+                    </h2>
                 :
                     <h2 className="font-normal text-xl text-gray-800 leading-tight">Profile</h2>
                 }
@@ -44,6 +49,16 @@ export default function Profile({ auth, user, chirps }) {
                                     <h1 className="text-2xl font-semibold text-gray-800">{user.name}</h1>
                                     <p className="text-sm text-gray-600">{user.email}</p>
                                 </div>
+                                { following != false &&
+                                    <button
+                                        onClick={ () => handleFollowToggle(user.id)}
+                                        className="ml-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                            {/* Send post request */}
+                                        <NavLink style={{ color: 'white'}}>
+                                            {following == null ? 'Follow' : 'Unfollow'}
+                                        </NavLink>
+                                    </button>
+                                }
                             </div>
                         </div>
                     </div>
