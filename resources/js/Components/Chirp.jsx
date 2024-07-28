@@ -108,42 +108,45 @@ export default function Chirp({ chirp }) {
                                     <PrimaryButton className="mt-2 mb-2">Save</PrimaryButton>
                                 </div>
                             </form>
-
                             { chirp.comments.map(comment =>
-                                <div key={comment.id} className="p-6 bg-gray-100 rounded-lg">
-                                    <div className="flex space-x-2">
-                                        <img src={'storage/' + comment.user.avatar} className="w-8 h-8 rounded-full" alt="avatar" />
-                                        <div className="flex-1">
-                                            <div className="flex justify-between items-center">
-                                                <div>
-                                                    <span className="text-gray-800">{comment.user.name}</span>
-                                                    <small className="ml-2 text-sm text-gray-600">{dayjs(comment.created_at).fromNow()}</small>
-                                                    { comment.created_at !== comment.updated_at && <small className="text-sm text-gray-600"> &middot; edited</small>}
+                                <>
+                                { comment.user &&
+                                    <div key={comment.id} className="p-6 bg-gray-100 rounded-lg">
+                                        <div className="flex space-x-2">
+                                            <img src={'storage/' + comment.user.avatar} className="w-8 h-8 rounded-full" alt="avatar" />
+                                            <div className="flex-1">
+                                                <div className="flex justify-between items-center">
+                                                    <div>
+                                                        <span className="text-gray-800">{comment.user.name}</span>
+                                                        <small className="ml-2 text-sm text-gray-600">{dayjs(comment.created_at).fromNow()}</small>
+                                                        { comment.created_at !== comment.updated_at && <small className="text-sm text-gray-600"> &middot; edited</small>}
+                                                    </div>
+                                                    {comment.user.id === auth.user.id &&
+                                                        <Dropdown>
+                                                            <Dropdown.Trigger>
+                                                                <button>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                                                        <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+                                                                    </svg>
+                                                                </button>
+                                                            </Dropdown.Trigger>
+                                                            <Dropdown.Content>
+                                                                <button className="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out">
+                                                                    Edit
+                                                                </button>
+                                                                <Dropdown.Link as="button" href={route('comments.destroy', comment.id)} method="delete">
+                                                                    Delete
+                                                                </Dropdown.Link>
+                                                            </Dropdown.Content>
+                                                        </Dropdown>
+                                                    }
                                                 </div>
-                                                {comment.user.id === auth.user.id &&
-                                                    <Dropdown>
-                                                        <Dropdown.Trigger>
-                                                            <button>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-                                                                </svg>
-                                                            </button>
-                                                        </Dropdown.Trigger>
-                                                        <Dropdown.Content>
-                                                            <button className="block w-full px-4 py-2 text-left text-sm leading-5 text-gray-700 hover:bg-gray-100 focus:bg-gray-100 transition duration-150 ease-in-out">
-                                                                Edit
-                                                            </button>
-                                                            <Dropdown.Link as="button" href={route('comments.destroy', comment.id)} method="delete">
-                                                                Delete
-                                                            </Dropdown.Link>
-                                                        </Dropdown.Content>
-                                                    </Dropdown>
-                                                }
+                                                <p className="mt-4 text-lg text-gray-900">{comment.message}</p>
                                             </div>
-                                            <p className="mt-4 text-lg text-gray-900">{comment.message}</p>
                                         </div>
                                     </div>
-                                </div>
+                                }
+                                </>
                             )}
                         </>
                     }
