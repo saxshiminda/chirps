@@ -135,4 +135,8 @@ class FollowController extends Controller
     protected function getUser($id){
         return User::findOrFail($id);
     }
+
+    public function getFollowing(){
+        // redirect back with User::whereIn('id', auth()->user()->follows->pluck('friend_id'))->get();
+    }
 }

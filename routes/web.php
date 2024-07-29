@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/follow', [FollowController::class, 'follow'])->name('follow');
 
     Route::get('/profile{userId}', [ProfileController::class, 'index'])->name('profile.index');
+
+    Route::get('/friends', [FollowController::class, 'getFollowing']);
 });
 
 Route::get('/notifications', function () {
@@ -51,7 +53,6 @@ Route::get('/notifications', function () {
 
     return $activeNotifications;
 })->middleware(['auth']);
-
 
 
 // Route::group(['middleware' => 'auth'], function () {
