@@ -25,21 +25,22 @@ class ProfileController extends Controller
         $authUser = auth()->user();
         $userId  = $request->route('userId') ?? $request->user()->id;
 
-        if($userId != $authUser->id) {
-            $following = Follow::where('user_id', $authUser->id)
-                ->where('friend_id', $userId)
-                ->first();
-        } else {
-            $following = false;
-        }
+        $following = Follow::where('user_id', $authUser->id)
+            ->where('friend_id', $userId)
+            ->first();
 
         return Inertia::render('Profile/Index', [
             'user' => User::where('id', $userId)->firstOrFail(),
-            'chirps' => Chirp::with('user:id,name,avatar')
-                ->with('comments.user:id,name,avatar')
-                ->where('user_id', $userId)
-                ->latest()->get(),
-            'following' => $following,
+            'data' => [
+                'chirps' => Chirp::with('user:id,name,avatar')
+                    ->with('comments.user:id,name,avatar')
+                    ->where('user_id', $userId)
+                    ->latest()->get(),
+                'following' => $following,
+                'followers' => Follow::where('friend_id', $userId)->count(),
+                // 'friends' => Follow::where('user_id', $userId),
+                'friends' => User::whereIn('id', Follow::where('user_id', $userId)->pluck('friend_id'))->get(),
+            ]
         ]);
     }
 

@@ -7,7 +7,7 @@ import { Link } from '@inertiajs/react';
 import axios from 'axios';
 import Sidemenu from '@/Components/Sidemenu';
 
-export default function Authenticated({ user, header, children }) {
+export default function Authenticated({auth, user, header, children }) {
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
@@ -106,7 +106,7 @@ export default function Authenticated({ user, header, children }) {
                                                     type="button"
                                                     className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                                 >
-                                                    {user.name}
+                                                    {auth ? auth.user.name : user.name}
 
                                                     <svg
                                                         className="ms-2 -me-0.5 h-4 w-4"

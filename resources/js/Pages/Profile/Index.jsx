@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import Chirp from '@/Components/Chirp';
+import Userslist from '@/Components/Userslist';
 import NavLink from '@/Components/NavLink';
 
-export default function Profile({ auth, user, chirps, following }) {
-
+export default function Profile({ auth, user, data }) {
     const { post} = useForm();
+    const friends = data.friends.map(friend => friend.id);
+
+    const [showFollowing, setShowFollowing] = useState(false);
+    const [showChirps, setShowChirps] = useState(true);
 
     const handleFollowToggle = (userId) => {
         post(route('follow', { userId: userId }));
@@ -15,6 +19,7 @@ export default function Profile({ auth, user, chirps, following }) {
     return (
         <AuthenticatedLayout
             user={user}
+            auth={auth}
             header={
                 <>
                 {auth.user.id !== user.id
@@ -49,13 +54,14 @@ export default function Profile({ auth, user, chirps, following }) {
                                     <h1 className="text-2xl font-semibold text-gray-800">{user.name}</h1>
                                     <p className="text-sm text-gray-600">{user.email}</p>
                                 </div>
-                                { following != false ?
+                                { auth.user.id !== user.id
+                                ?
                                     <button
                                         onClick={ () => handleFollowToggle(user.id)}
                                         className="ml-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                             {/* Send post request */}
                                         <NavLink style={{ color: 'white'}}>
-                                            {following == null ? 'Follow' : 'Unfollow'}
+                                            {data.following == null ? 'Follow' : 'Unfollow'}
                                         </NavLink>
                                     </button>
                                 :
@@ -63,20 +69,49 @@ export default function Profile({ auth, user, chirps, following }) {
                                         className="ml-10 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                                             {/* Send post request */}
                                         <NavLink style={{ color: 'white'}} href={route('setting.edit')}>
-
                                             Edit Profile
                                         </NavLink>
                                     </button>
                                 }
+
+                                <div className="ml-4">
+                                    <p className="text-sm text-gray-600">Followers: {data.followers}</p>
+                                </div>
+
+                                {/* menu to see friends or chirps */}
+
+                                <div
+                                    onClick={() => { setShowChirps(true); setShowFollowing(false)}}
+                                    className="ml-4">
+                                    <p>Chirps</p>
+                                </div>
+
+                                <div
+                                    onClick={() => { setShowChirps(false); setShowFollowing(true)}}
+                                    className="ml-4">
+                                    <p>Friends</p>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
 
-                    <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                        {chirps.map(chirp =>
-                            <Chirp key={chirp.id} chirp={chirp} />
-                        )}
-                    </div>
+                    { showChirps &&
+                        <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
+                            {data.chirps.map(chirp =>
+                                <Chirp key={chirp.id} chirp={chirp} />
+                            )}
+                        </div>
+                    }
+
+                    { showFollowing &&
+                        <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
+                            {data.friends.map( (user, index) =>
+                                <Userslist key={user.id} user={user} follow={handleFollowToggle} friends={friends}/>
+                            )}
+                        </div>
+                    }
                 </div>
             </div>
         </AuthenticatedLayout>

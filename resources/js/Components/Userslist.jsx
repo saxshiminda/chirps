@@ -1,8 +1,5 @@
-// create users list component
 import React from 'react';
 import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-// import { Link } from '@inertiajs/inertia-react';
 
 export default function Userslist({ user, follow, friends }) {
 
@@ -27,7 +24,6 @@ export default function Userslist({ user, follow, friends }) {
                         <button
                             className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
 
-                            {/* disable hower on this navlink */}
                             <NavLink href={route('profile.index', {userId: user.id})} active={route().current('profile.index')} style={{ color: 'white'}}>
                                 Profile
                             </NavLink>
