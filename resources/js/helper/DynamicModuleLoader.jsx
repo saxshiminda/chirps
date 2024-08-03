@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 
-const DynamicModuleLoader = ({ address, children }) => {
+const DynamicModuleLoader = ({ address, data, children }) => {
     const [Module, setModule] = useState(null);
 
     useEffect(() => {
-        if (moduleName) {
+        if (address.module) {
         // Dynamically import the module
-        import(`./${address.helperName}/${address.moduleName}.jsx`)
+        import(`./${address.helper}/${address.module}.jsx`)
             .then((module) => {
                 setModule(() => module.default);
             })
             .catch((error) => {
-                console.error(`Error importing ${moduleName}:`, error);
+                console.error(`Error importing ${address.module}:`, error);
             });
         }
-    }, [moduleName]);
+    }, [address.module]);
 
     // Render the dynamically imported module if available
-    return Module ? <Module auth={auth} data={} >{children}</Module> : <div>Loading...</div>;
+    return Module ? <Module data={data}>{children}</Module> : <div>Loading...</div>;
 };
 
 export default DynamicModuleLoader;
