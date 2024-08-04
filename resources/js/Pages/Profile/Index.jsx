@@ -4,17 +4,32 @@ import { Head, useForm } from '@inertiajs/react';
 import Chirp from '@/Components/Chirp';
 import Userslist from '@/Components/Userslist';
 import NavLink from '@/Components/NavLink';
+import DynamicModuleLoader, {setHelper} from '@/helper/DynamicModuleLoader';
 
 export default function Profile({ auth, user, data }) {
-    const { post} = useForm();
-    const friends = data.friends.map(friend => friend.id);
-
-    const [showFollowing, setShowFollowing] = useState(false);
-    const [showChirps, setShowChirps] = useState(true);
+    const { post } = useForm();
+    const friendsIds = data.friends.map(friend => friend.id);
 
     const handleFollowToggle = (userId) => {
         post(route('follow', { userId: userId }));
     }
+
+    const [dashboardData, setDashboardData] = useState({
+        param: data.chirps,
+        user: user,
+        auth: auth,
+        follow: handleFollowToggle,
+        friendsIds
+    });
+
+    /**
+     *
+     */
+    const [userDashboard, setUserDashboard] = useState({
+        helper:'lists',
+        module: 'Chirplist',
+        data: dashboardData,
+    });
 
     return (
         <AuthenticatedLayout
@@ -79,15 +94,33 @@ export default function Profile({ auth, user, data }) {
                                 </div>
 
                                 {/* menu to see friends or chirps */}
-
                                 <div
-                                    onClick={() => { setShowChirps(true); setShowFollowing(false)}}
+                                    onClick={() => {
+                                        setUserDashboard({
+                                            helper:'lists',
+                                            module: 'Chirplist',
+                                            data: {
+                                                ...dashboardData,
+                                                param: data.chirps,
+                                            }
+                                        });
+                                    }}
                                     className="ml-4">
                                     <p>Chirps</p>
                                 </div>
 
                                 <div
-                                    onClick={() => { setShowChirps(false); setShowFollowing(true)}}
+                                    onClick={() => {
+                                        setUserDashboard({
+                                            helper:'lists',
+                                            module: 'Userlist',
+                                            data: {
+                                                ...dashboardData,
+                                                param: data.friends,
+                                            }
+                                        });
+
+                                    }}
                                     className="ml-4">
                                     <p>Friends</p>
                                 </div>
@@ -97,21 +130,11 @@ export default function Profile({ auth, user, data }) {
                         </div>
                     </div>
 
-                    { showChirps &&
-                        <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                            {data.chirps.map(chirp =>
-                                <Chirp key={chirp.id} chirp={chirp} />
-                            )}
-                        </div>
-                    }
-
-                    { showFollowing &&
-                        <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
-                            {data.friends.map( (user, index) =>
-                                <Userslist key={user.id} user={user} follow={handleFollowToggle} friends={friends}/>
-                            )}
-                        </div>
-                    }
+                    <div className="mt-6 bg-white shadow-sm rounded-lg divide-y">
+                        <DynamicModuleLoader key={user.id}
+                            params={userDashboard}
+                        />
+                    </div>
                 </div>
             </div>
         </AuthenticatedLayout>
